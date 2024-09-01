@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { auth } from "./firebase"; // Ensure you have configured Firebase correctly
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { json } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const {
@@ -10,7 +10,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+const navigate = useNavigate()
   const onSubmit = async (data) => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
@@ -21,6 +21,7 @@ const SignIn = () => {
           "authToken",
           JSON.stringify({ email: "deepak@gmail.com", role: "admin" , name:"deepak" })
         );
+        navigate("/home");
         return;
       }
       if (auth.currentUser.email == "anish@gmail.com") {
@@ -28,17 +29,20 @@ const SignIn = () => {
           "authToken",
           JSON.stringify({ email: "anish@gmail.com", role: "pickup" , name:"anish" })
         );
+        navigate("/home");
+        return;
+      }
+
+      if (auth.currentUser.email == "sathish@gmail.com") {
+        localStorage.setItem(
+          "authToken",
+          JSON.stringify({ email: "sathish@gmail.com", role: "pickup" , name :"sathish"})
+        );
+        navigate("/home");
         return;
       }
     } catch (error) {
       alert("Error: " + error.message);
-    }
-    if (auth.currentUser.email == "sathish@gmail.com") {
-      localStorage.setItem(
-        "authToken",
-        JSON.stringify({ email: "sathish@gmail.com", role: "pickup" , name :"sathish"})
-      );
-      return;
     }
   };
 

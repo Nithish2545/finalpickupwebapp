@@ -6,8 +6,7 @@ const PickupCards = ({ users, onCardClick, onAssignmentChange, pickupPersons, on
       {users.map((user, index) => (
         <div
           key={index}
-          className="bg-white shadow rounded-lg p-4 mb-4 cursor-pointer"
-          onClick={() => onCardClick(user)}
+          className="bg-white shadow rounded-lg p-4 mb-4"
         >
           <div className="mb-4">
             <div className={`bg-${user.STATUS === "PENDING" ? "red" : user.STATUS === "COMPLETED" ? "green" : "gray"}-200 p-2 rounded text-${user.STATUS === "PENDING" ? "red" : user.STATUS === "COMPLETED" ? "green" : "gray"}-800`}>
