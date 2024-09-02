@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { auth } from "./firebase"; // Import Firebase auth
 import SignIn from "./SignIn";
 import Home from "./Home";
-import DetailScreen from "./DetailScreen"; // Import your DetailScreen component
+import DetailScreen from "./Admin/DetailScreen"; // Import your DetailScreen component
+import PickupDetails from "./Pickup/PickupDetails";
 
 function App() {
   const [user, setUser] = useState(null); // State to hold the current user
@@ -36,6 +36,7 @@ function App() {
       <Route path="/" element={<SignIn />} />
       <Route path="/home" element={<Home />} />
       <Route path="/details/:awbNumber" element={<DetailScreen />} />
+      <Route path="/PickupDetails/:awbnumber" element={<PickupDetails />} />
     </Routes>
   );
 }

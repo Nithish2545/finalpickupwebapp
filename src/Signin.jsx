@@ -1,8 +1,7 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { auth } from "./firebase"; // Ensure you have configured Firebase correctly
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const {

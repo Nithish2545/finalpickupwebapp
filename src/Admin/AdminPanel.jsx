@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
 import PickupTab from "./PickupTab";
 import OutgoingManifestTab from "./OutgoingManifestTab";
 import PaymentDoneTab from "./PaymentDoneTab";
@@ -30,7 +30,7 @@ function AdminPanel() {
   const signOut = async () => {
     try {
       await auth.signOut();
-      navigate("/signin");
+      navigate("/");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -95,29 +95,23 @@ function AdminPanel() {
   };
 
   // Update pickup person with retry logic
-  const updatePickUpPersonWithRetry = async (
-    awbNumber,
-    pickUpPerson,
-    retryCount = 0
-  ) => {
+  const updatePickUpPersonWithRetry = async (awbNumber, pickUpPerson, retryCount = 0) => {
+    const options = {
+      method: 'POST',
+      url: 'https://script.google.com/macros/s/AKfycbwhhilXDoZN7TZUNP2s-XS9MGfavoIuJGTVvzU6IhGCGUCza_cg6ILu03uBXo8tGG2D/exec', // Replace with your actual URL
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      data: JSON.stringify({
+        awbNumber: awbNumber,
+        pickUpPerson: pickUpPerson,
+      }),
+    };
+  
     try {
-      const url = `${SHEETDB_API_URL}/id/${awbNumber}`;
-      const response = await axios.patch(
-        url,
-        { data: { PickUpPersonName: pickUpPerson } },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error("Failed to update the row");
-      }
-
-      console.log("PickUpPersonName updated successfully");
+      const response = await axios.request(options);
+      console.log("PickUpPersonName updated successfully:", response.data);
       await fetchAssignments(); // Refresh assignments after update
     } catch (error) {
       if (error.response && error.response.status === 429 && retryCount < 3) {
@@ -135,7 +129,7 @@ function AdminPanel() {
       }
     }
   };
-
+  
   // Handle assignment change
   const handleAssignmentChange = async (index, value) => {
     const selectedUser = userData[index];
@@ -170,7 +164,7 @@ function AdminPanel() {
   const getFilteredData = () => {
     switch (activeTab) {
       case "pickup":
-        return filteredUserData.filter((user) => user.STATUS === "PICKUP");
+        return filteredUserData.filter((user) => user.STATUS === "RUN SHEET");
       case "connections":
         return filteredUserData.filter(
           (user) => user.STATUS === "OUTGOING MANIFEST"
