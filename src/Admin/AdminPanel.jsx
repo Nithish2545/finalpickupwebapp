@@ -6,12 +6,9 @@ import PickupTab from "./PickupTab";
 import OutgoingManifestTab from "./OutgoingManifestTab";
 import PaymentDoneTab from "./PaymentDoneTab";
 import PaymentPendingTab from "./PaymentPendingTab";
-import "./AdminPanel.css"
+import "./AdminPanel.css";
 
-const API_URL =
-  "https://sheet.best/api/sheets/27658b60-3dca-4cc2-bd34-f65124b8a27d";
-const SHEETDB_API_URL =
-  "https://api.sheety.co/ae021e3452f9692ed18653ea7a2c7526/pickupdata/sheet1";
+const API_URL = "https://script.google.com/macros/s/AKfycbxTwEjjCN9OYy73ma64LwRuG1eKVzgj5HyQybF1okUWKLpXLx1y3aCCXo6x3Cfbi9Gh/exec";
 
 function AdminPanel() {
   const navigate = useNavigate();
@@ -36,6 +33,16 @@ function AdminPanel() {
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
+  fetchData();
   // Fetch user role from local storage
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -98,7 +105,7 @@ function AdminPanel() {
   const updatePickUpPersonWithRetry = async (awbNumber, pickUpPerson, retryCount = 0) => {
     const options = {
       method: 'POST',
-      url: 'https://script.google.com/macros/s/AKfycbwhhilXDoZN7TZUNP2s-XS9MGfavoIuJGTVvzU6IhGCGUCza_cg6ILu03uBXo8tGG2D/exec', // Replace with your actual URL
+      url: API_URL, // Use the same URL for updating data
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
